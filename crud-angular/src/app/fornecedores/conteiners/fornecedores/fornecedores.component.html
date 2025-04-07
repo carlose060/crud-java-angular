@@ -1,0 +1,13 @@
+<div class="container">
+
+  <mat-toolbar color="primary"> Fornecedores </mat-toolbar>
+
+    <app-fornecedores-list
+    *ngIf="fornecedores$ | async as fornecedoresList"
+    [fornecedores]="fornecedoresList"
+    (add)="onAdd()"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+    ></app-fornecedores-list>
+
+</div>

@@ -1,0 +1,17 @@
+<div class="container">
+
+  <mat-toolbar color="primary"> Empresas</mat-toolbar>
+
+
+    <app-empresas-list
+    *ngIf="empresas$ | async as empresasList"
+    [empresas]="empresasList"
+    (add)="onAdd()"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+    ></app-empresas-list>
+
+
+
+
+</div>

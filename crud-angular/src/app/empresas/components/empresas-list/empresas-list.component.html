@@ -1,0 +1,43 @@
+<mat-table [dataSource]="empresas" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="cnpj">
+    <mat-header-cell  *matHeaderCellDef> CNPJ </mat-header-cell>
+    <mat-cell  *matCellDef="let empresa"> {{empresa.cnpj}} </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="nomeFantasia">
+    <mat-header-cell  *matHeaderCellDef> NOME FANTA </mat-header-cell>
+    <mat-cell  *matCellDef="let empresa"> {{empresa.nomeFantasia}} </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="cep">
+    <mat-header-cell  *matHeaderCellDef> CEP </mat-header-cell>
+    <mat-cell  *matCellDef="let empresa"> {{empresa.cep}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell  *matHeaderCellDef>
+      <button mat-icon-button  color="primary" aria-label="Add empresa" (click)="onAdd()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-header-cell>
+
+    <mat-cell  *matCellDef="let empresa">
+      <button mat-icon-button  color="accent" aria-label="Editar empresa" (click)="onEdit(empresa)">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+
+      <button mat-icon-button  color="warn" aria-label="Deletar empresa" (click)="onDelete(empresa)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+
+
+  <mat-header-row  *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row  *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
