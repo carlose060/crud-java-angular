@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmpresasService } from '../../servicos/empresas.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { FornecedoresService } from '../../../fornecedores/servicos/fornecedores.service';
+import { Fornecedor } from '../../../fornecedores/model/fornecedor';
 
 @Component({
   selector: 'app-empresa-form',
@@ -15,6 +18,7 @@ export class EmpresaFormComponent implements OnInit {
 
   form: FormGroup;
   editando = false;
+  fornecedores: Fornecedor[] = [];
 
   constructor(
     private formBuild: FormBuilder,
@@ -22,11 +26,13 @@ export class EmpresaFormComponent implements OnInit {
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
+    private fornecedorService: FornecedoresService
     ){
       this.form = this.formBuild.group({
         cnpj:  ['', [Validators.required, Validators.minLength(14), Validators.maxLength(14)]],
         nomeFantasia: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
         cep: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
+        fornecedores: [[]],
       });
     }
   ngOnInit(): void {
@@ -39,6 +45,10 @@ export class EmpresaFormComponent implements OnInit {
           this.form.get('cnpj')?.disable();
         });
       }
+      this.fornecedorService.getFornecedores().subscribe({
+        next: (res) => this.fornecedores = res,
+        error: (err) => console.error('Erro ao carregar fornecedores:', err)
+      });
   }
 
   onSubmit(){

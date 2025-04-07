@@ -1,6 +1,8 @@
 package com.backend.service;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.backend.model.Empresa;
 import com.backend.model.Fornecedor;
+import com.backend.repository.EmpresaRepository;
 import com.backend.repository.FornecedorRepository;
 
 
@@ -18,6 +22,8 @@ public class FornecedorService {
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     public List<Fornecedor> getAllFornecedores() {
         return fornecedorRepository.findAll();
@@ -29,19 +35,20 @@ public class FornecedorService {
                 .orElse(ResponseEntity.notFound().build());
     }  
 
-    public  ResponseEntity<?> create(Fornecedor fornecedor) {
-        if (fornecedor.getCpfCnpj().length() > 14) {
-        fornecedor.setCpfCnpj(fornecedor.getCpfCnpj().substring(0, 14));
-        }
+    public ResponseEntity<?> create(Fornecedor fornecedor) {
+    Set<Empresa> empresasAssociadas = new HashSet<>();
 
-        if (fornecedor.isPessoaFisica()) {
-            if(fornecedor.getRg() == null || fornecedor.getDataNascimento() == null) {
-                return ResponseEntity.badRequest().body("Pessoa física deve ter RG e data de nascimento");
-            }
+    if (fornecedor.getEmpresas() != null) {
+        for (Empresa empresa : fornecedor.getEmpresas()) {
+            empresaRepository.findById(empresa.getCnpj()).ifPresent(empresasAssociadas::add);
         }
-        Fornecedor salvo = fornecedorRepository.save(fornecedor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
+
+    fornecedor.setEmpresas(empresasAssociadas);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(fornecedorRepository.save(fornecedor));
+    }
+
     public ResponseEntity<Fornecedor> update(String cnpjCpf, @RequestBody Fornecedor fornecedor) {
         return fornecedorRepository.findById(cnpjCpf)
         .map(response -> {
@@ -61,13 +68,24 @@ public class FornecedorService {
             
         }
     
-    public ResponseEntity<?> delete(String cnpjCpf) {
-        return fornecedorRepository.findById(cnpjCpf)
-                .map(response -> {
-                    fornecedorRepository.deleteById(cnpjCpf);
-                    return ResponseEntity.ok().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+ 
+    public ResponseEntity<?> delete(String cpfCnpj) {
+        Optional<Fornecedor> fornecedorOptional = fornecedorRepository.findById(cpfCnpj);
+    
+        if (fornecedorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+    
+        Fornecedor fornecedor = fornecedorOptional.get();
+    
+        // Remove a associação nas empresas antes de deletar
+        fornecedor.getEmpresas().forEach(empresa -> empresa.getFornecedores().remove(fornecedor));
+        fornecedor.getEmpresas().clear();
+    
+        fornecedorRepository.delete(fornecedor);
+    
+        return ResponseEntity.ok().build();
     }
+    
     
 }

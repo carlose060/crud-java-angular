@@ -37,6 +37,8 @@ public class EmpresaController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Empresa empresa) {
+        System.out.println("Fornecedores recebidos: " + empresa.getFornecedores());
+
         return empresaService.create(empresa);
      
     }

@@ -19,8 +19,6 @@ export class FornecedoresService {
   }
 
   remove(cpfCnpj: string) {
-
-    //FAZER A FUNÇão
     return this.httpClient.delete(`api/fornecedores/${cpfCnpj}`);
   }
 

@@ -16,6 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { EmpresasListComponent } from './components/empresas-list/empresas-list.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { MatSelectModule } from '@angular/material/select';
+
 
 
 @NgModule({
@@ -37,7 +39,8 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     MatButtonModule,
     MatSnackBarModule,
     NgxMaskDirective,
-    NgxMaskPipe
+    NgxMaskPipe,
+    MatSelectModule
   ],
   providers: [
     provideNgxMask()

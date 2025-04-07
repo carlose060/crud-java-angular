@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FornecedoresService } from '../../servicos/fornecedores.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Empresa } from '../../../empresas/model/empresa';
+import { EmpresasService } from '../../../empresas/servicos/empresas.service';
 
 @Component({
   selector: 'app-fornecedor-form',
@@ -14,7 +16,7 @@ export class FornecedorFormComponent {
   form: FormGroup;
   editando = false;
 
-
+  empresas: Empresa[] = [];
 
   constructor(
     private formBuild: FormBuilder,
@@ -22,6 +24,7 @@ export class FornecedorFormComponent {
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
+    private empresasService: EmpresasService
     ){
       this.form = this.formBuild.group({
         tipoPessoa: ['1'],
@@ -31,6 +34,7 @@ export class FornecedorFormComponent {
         email: ['', [Validators.required, Validators.email]],
         dataNascimento: [''],
         rg: [''],
+        empresas: [[]]
       });
 
     }
@@ -45,6 +49,10 @@ export class FornecedorFormComponent {
           this.form.get('cpfCnpj')?.disable();
         });
       }
+      this.empresasService.getEmpresas().subscribe({
+        next: (res) => this.empresas = res,
+        error: (err) => console.error('Erro ao carregar empresas:', err)
+      });
   }
 
   onSubmit(){

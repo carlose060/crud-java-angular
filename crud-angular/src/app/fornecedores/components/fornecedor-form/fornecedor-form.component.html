@@ -39,6 +39,16 @@
         </mat-form-field>
       </div>
 
+      <mat-form-field appearance="fill">
+        <mat-label>Empresas</mat-label>
+        <mat-select formControlName="empresas" multiple>
+          <mat-option *ngFor="let e of empresas" [value]="e">
+            {{ e.nomeFantasia }} ({{ e.cnpj }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
       <button mat-raised-button (click)="onSubmit()">Salvar</button>
       <button mat-raised-button (click)="onBack()">Voltar</button>
     </form>

@@ -14,7 +14,8 @@ import { FornecedoresListComponent } from './components/fornecedores-list/fornec
 import { FornecedorFormComponent } from './components/fornecedor-form/fornecedor-form.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,9 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     ReactiveFormsModule,
     MatRadioModule,
     NgxMaskDirective,
-    NgxMaskPipe
+    NgxMaskPipe,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
     provideNgxMask()

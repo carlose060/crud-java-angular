@@ -17,10 +17,19 @@
             <input matInput placeholder="CEP" formControlName="cep" mask="00000-000"/>
           </mat-form-field>
 
+          <mat-form-field appearance="fill">
+            <mat-label>Fornecedores</mat-label>
+            <mat-select formControlName="fornecedores" multiple>
+              <mat-option *ngFor="let f of fornecedores" [value]="f">
+                {{ f.nome }} ({{ f.cpfCnpj }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
 
           <button mat-raised-button (click)="onSubmit()">Salvar</button>
           <button mat-raised-button (click)="onBack()">Voltar</button>
-
 
       </form>
 
